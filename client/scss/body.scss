@@ -1,0 +1,282 @@
+$grey: #F2F2F2;
+$red: #BB0000;
+
+.is-pin-red{
+    background-color: $red;
+    border-radius: 4px;
+}
+
+.board-buttons{
+    display: inline-flex;
+    margin-left: 11%;
+    margin-top: 1%;
+}
+html, body, #app{
+  height: 100%
+}
+
+.background{
+    background-color: $grey;
+    height: 100%;
+}
+
+.logo {
+  padding-top: 0.4em;
+  margin-top: 12%;
+  margin-left: 11%;
+  width: 100%;
+}
+
+.center{
+    text-align: center;
+}
+
+.navbar {
+  background-color: black;
+  a{
+      color:white;
+  }
+}
+
+.grid {
+  column-count: 5; 
+  column-gap: 1em;
+  margin-top: 2%;
+  height: 100%;
+//   fix to real grid
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  height: 100%;
+  a{
+    text-decoration: none;
+   }
+}
+
+.new-pin{
+    height: 200px;
+    width: 100%;
+    background-color: $grey;
+    text-align: center;
+    border-radius: 10%;
+    img{
+    height: 50px;
+    width: 50px;
+    margin-top:40%;
+    }
+}
+
+.pin-header{
+    display: none;
+    button{
+          margin-left: auto;
+    }
+}
+
+.content-photo:hover {
+    background-color: $grey;
+    .pin-header{
+    display: flex;
+    button{
+          margin-left: auto;
+    }
+}
+}
+.content-photo{
+    border-radius: 8px;
+    transition: all 0.5s ease;
+    display: inline-block;
+    margin: 0 0 1em;
+    img{
+    border-radius: 8px;
+    max-width: 95%;
+    max-height: 95%;
+    margin-top: 2%;
+    margin-bottom: 2%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    }
+}
+
+.single-content-photo{
+  text-align: center;
+  padding: 2em;
+  background-color: white;
+  border-radius: 1em 1em 1em 1em;
+  width: 44%;
+  .single-pin-button{
+    left: 69%;
+    position: absolute;
+    margin-top: -6%;
+  }
+  .item-photo{
+    max-width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 5%;
+      img{
+        border-radius: 8px;
+      }
+  }
+}
+
+.desc{
+    width: 75%;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.board-title{
+    background-color: $grey;
+    margin-top: 3%;
+    margin-left: 3%;
+    border-radius: 3%;
+}
+
+.board{
+    margin: 5%;
+}
+.board-button{
+  text-align: center;
+  background-color: $grey;
+  border-radius: 1em 1em 1em 1em;
+  height: 100%;
+    img{
+  height: 25%;
+  width: 25%;
+  margin-top: 40%;
+    }
+}
+
+.form-save{
+   display: block;
+   height: 15%;
+   width: 43%;
+   z-index: 10000;
+   border: black solid 1px;
+   border-radius: 8px;   
+   transform: translate(60%, 0);
+   position: absolute;
+   background-color: $grey;
+
+}
+.form-board {
+    display: block;
+    height: 30%;
+    width: 43%;
+    left: 50%;
+    transform: translate(-50%, 0);
+    margin-top: 17%;
+    background-color: $grey;
+    border-radius: 8px;   
+    border: black solid 1px;
+    position: absolute;
+    justify-content:center;
+    z-index: 10000;
+    text-align: center;
+    p{
+        text-align: left;
+        margin-left: 2%;
+        font-size: 2em;
+    }
+    .control{
+        width: 83%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    button{
+        margin-top:1%;
+        margin-bottom: 1%;
+        margin-left: 85%;
+    }
+    
+}
+
+
+.form-pin{
+  background-color: $grey;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60%;
+  border-radius: 8px;
+  height: 65%;
+  hr{
+    margin: 0.5rem 0;
+    margin-left: 0;
+    margin-right: 0;
+    display: block;
+  }
+}
+
+.form-pin-title{
+    height: 3em;
+    border-radius: 8px;
+    p{
+        font-size: 2em;
+    }
+}
+
+.dropzone{
+    background-color: $grey;
+    height: 70%;
+    width: 30%;
+    margin: 3% 0% 0% 10%;
+    border-radius: 8px;
+}
+
+.form-pin-input{
+   margin: 3% 0% 0% 10%;
+   width: 39%;
+}
+
+.back-button{
+    margin-top: 1%;
+    position: absolute;
+    margin-left: 1%;
+    cursor: pointer;
+    z-index:1;
+    span{
+      position: relative;
+      top: -3px;
+    }
+}
+
+.form-pin-input-button{
+    div{
+        display: inline-block;
+        margin: 1%;
+    }
+}
+
+.tick{
+    margin-top: 10%;
+    img{
+        width: 50%;
+    }
+}
+
+.navbar-menu{
+    background-color: black;
+}
+
+.search-icon{
+    color: red;
+}
+
+
+/* Smartphones (portrait and landscape) ----------- */
+@media only screen and (min-device-width : 320px) and (max-device-width : 480px) {
+.single-content-photo{
+	width: 100vw;
+}
+}
+
+.my-masonry-grid {
+  display: flex;
+}

@@ -1,0 +1,57 @@
+/* UploadPostForm.css */
+.upload__form-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .upload__form-container {
+    width: 30%; /* La card occupa il 40% della larghezza della pagina */
+    background-color: white;
+    border-radius: 16px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+  }
+  
+  .upload__form-container img {
+    display: block;
+    width: 100%;
+    height: auto;
+    cursor: zoom-in;
+    border-bottom: 1px solid #ddd; /* Separatore tra l'immagine e il form */
+  }
+  
+  .upload__form-container:hover img {
+    filter: brightness(70%);
+  }
+  
+  .upload__form-content {
+    padding: 16px;
+  }
+  
+  .upload__form-container input[type="file"] {
+    display: block;
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .upload__submit-btn {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px; /* Aggiunta di margine superiore per separare il pulsante dagli altri campi */
+  }
+  
+  .upload__submit-btn .MuiButton-root {
+    width: 100%;
+    font-weight: 700;
+    border-radius: 24px;
+    height: 48px;
+    padding: 0 17px;
+    background-color: var(--red);
+    color: white;
+  }
+  
+  .upload__submit-btn .MuiButton-root:hover {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.1) 0 0);
+  }
+  

@@ -1,0 +1,64 @@
+.settings-container {
+    display: flex;
+    padding: 20px;
+  }
+  
+  .settings-sidebar {
+    flex: 1;
+    max-width: 200px;
+    margin-right: 20px;
+    background-color: #f8f8f8;
+    padding: 20px;
+    border-radius: 8px;
+  }
+  
+  .settings-link {
+    display: block;
+    margin: 10px 0;
+    text-decoration: none;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .settings-link:hover, .settings-link.active {
+    color: #007bff;
+  }
+  
+  .Goback-button {
+    display: block;
+    margin: 10px 0;
+    margin-right: 20px;
+    background: none;
+    border: none;
+    color: #000;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .Goback-button:hover {
+    color: #007bff;
+  }
+  
+  .delete-button {
+    display: block;
+    margin: 10px 0;
+    background: none;
+    border: none;
+    color: red;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .delete-button:hover {
+    color: darkred;
+  }
+  
+  .settings-content {
+    flex: 3;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
