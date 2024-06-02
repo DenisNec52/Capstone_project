@@ -13,11 +13,9 @@ const pinSchema = new Schema({
   count: { type: Number, required: false },
 });
 
-PageSchema.statics.findByTag = function (tag) {
+pinSchema.statics.findByTag = function (tag) {
   return this.find({ tags: { $elemMatch: { $eq: tag } } }).exec();
 };
-
-
 
 const Pin = mongoose.model('pin', pinSchema);
 
