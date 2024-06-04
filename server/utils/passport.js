@@ -61,8 +61,5 @@ const configurePassport = (passport) => {
     )
   );
 };
-<<<<<<< Updated upstream
-=======
 
 export default configurePassport;
->>>>>>> Stashed changes
