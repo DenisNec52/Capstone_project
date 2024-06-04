@@ -1,11 +1,9 @@
 import React from "react";
-
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { Link } from "react-router-dom";
-
-import "../components/FormLayout.css";
+import { Link, useNavigate } from "react-router-dom";
 import { login } from "../actions/session";
+import "../components/FormLayout.css";
 
 const LoginFormLayout = () => {
   const {
@@ -16,14 +14,18 @@ const LoginFormLayout = () => {
 
   const dispatch = useDispatch();
   const sessionError = useSelector((state) => state.sessionError);
+  const navigate = useNavigate();
 
-  const handleLogin = (userData) => {
-    dispatch(login(userData));
+  const handleLogin = async (userData) => {
+    const response = await dispatch(login(userData));
+    if (response?.token) {
+      navigate('/'); // Redirect to the home page
+    }
   };
 
   const handleDemoLogin = () => {
     const userData = {
-      username: "john.doe",
+      usernameOrEmail: "john.doe",
       password: "johndoe",
     };
     handleLogin(userData);
@@ -34,13 +36,14 @@ const LoginFormLayout = () => {
       <form onSubmit={handleSubmit(handleLogin)}>
         <input
           type="text"
-          placeholder="Username"
+          placeholder="Username or Email"
           className={`form__input ${
-            errors.username ? "form__input--error" : ""
+            errors.usernameOrEmail ? "form__input--error" : ""
           }`}
-          {...register("username", { required: true })}
+          {...register("usernameOrEmail", { required: true })}
         />
-        {errors.username && <p className="form__error">Username is required</p>}
+        {errors.usernameOrEmail && <p className="form__error">Username or Email is required</p>}
+        
         <input
           type="password"
           placeholder="Password"
@@ -50,7 +53,9 @@ const LoginFormLayout = () => {
           {...register("password", { required: true })}
         />
         {errors.password && <p className="form__error">Password is required</p>}
+        
         {sessionError && <p className="form__error">{sessionError}</p>}
+        
         <button type="submit" className="form__btn form__btn--submit">
           Log In
         </button>

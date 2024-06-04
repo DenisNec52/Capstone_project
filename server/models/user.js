@@ -1,19 +1,26 @@
-const mongoose = require("mongoose");
-const uniqueValidator = require("mongoose-unique-validator");
+import mongoose from 'mongoose';
+import uniqueValidator from 'mongoose-unique-validator';
+import bcrypt, { hash } from 'bcrypt';
 
 const userSchema = new mongoose.Schema({
   username: {
     type: String,
-    requred: true,
+    required: true,
     unique: true,
   },
   name: {
     type: String,
     required: true,
   },
+  email: {
+    type: String,
+    required: true,
+    unique: true,
+  },
   passwordHash: {
     type: String,
     required: true,
+    hash: true,
   },
   savedPins: {
     type: [String],
@@ -22,7 +29,7 @@ const userSchema = new mongoose.Schema({
 
 userSchema.plugin(uniqueValidator);
 
-userSchema.set("toJSON", {
+userSchema.set('toJSON', {
   transform: (document, returnedObject) => {
     returnedObject.id = returnedObject._id.toString();
     delete returnedObject._id;
@@ -31,5 +38,5 @@ userSchema.set("toJSON", {
   },
 });
 
-const User = mongoose.model("User", userSchema);
-module.exports = User;
+const User = mongoose.model('User', userSchema);
+export default User;

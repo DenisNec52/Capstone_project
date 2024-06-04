@@ -1,6 +1,5 @@
 import jwtDecode from "jwt-decode";
-
-import * as userService from "../services/users.js";
+import * as userService from "../services/users";
 
 export const SET_CURRENT_USER = "SET_CURRENT_USER";
 export const RECEIVE_SESSION_ERROR = "RECEIVE_SESSION_ERROR";
@@ -24,15 +23,17 @@ export const receiveError = (error) => ({
   error,
 });
 
-export const clearError = (error) => ({
+export const clearError = () => ({
   type: CLEAR_SESSION_ERROR,
-  error,
 });
 
 export const signup = (userData) => async (dispatch) => {
   try {
-    await userService.signup(userData);
-    dispatch(login(userData));
+    const response = await userService.signup(userData);
+    const token = response.data.token;
+    localStorage.setItem("jwtToken", token);
+    setAuthToken(token);
+    dispatch(setCurrentUser(jwtDecode(token)));
   } catch (exception) {
     dispatch(receiveError(exception.response.data.error));
   }

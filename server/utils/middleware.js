@@ -1,11 +1,11 @@
-const logger = require("./logger");
+import { info, error } from './logger.js';
 
 const requestLogger = (request, response, next) => {
-  logger.info("Date:  ", new Date().toLocaleString());
-  logger.info("Method:", request.method);
-  logger.info("Path:  ", request.path);
-  logger.info("Body:  ", request.body);
-  logger.info("---");
+  info("Date:  ", new Date().toLocaleString());
+  info("Method:", request.method);
+  info("Path:  ", request.path);
+  info("Body:  ", request.body);
+  info("---");
   next();
 };
 
@@ -14,7 +14,7 @@ const unknownEndpoint = (request, response) => {
 };
 
 const errorHandler = (error, request, response, next) => {
-  logger.error(error.message);
+  error(error.message);
 
   if (error.name === "CastError") {
     return response.status(400).send({ error: "malformatted id" });
@@ -29,7 +29,7 @@ const errorHandler = (error, request, response, next) => {
   next(error);
 };
 
-module.exports = {
+export {
   requestLogger,
   unknownEndpoint,
   errorHandler,
