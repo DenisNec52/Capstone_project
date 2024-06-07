@@ -3,19 +3,23 @@ import { Button, FormControlLabel, Switch, FormControl, InputLabel, Select, Menu
 import "../components/PostSettings.css";
 
 const PostSettings = () => {
-  const [allowComments, setAllowComments] = useState(true);
-  const [postVisibility, setPostVisibility] = useState('public');
+  // Stati per impostazioni dei post
+  const [allowComments, setAllowComments] = useState(true); // Impostazione per consentire i commenti
+  const [postVisibility, setPostVisibility] = useState('public'); // Impostazione per la visibilità del post
 
+  // Funzione per gestire il cambio dello switch per consentire i commenti
   const handleAllowCommentsChange = (event) => {
     setAllowComments(event.target.checked);
   };
 
+  // Funzione per gestire il cambio della visibilità del post
   const handlePostVisibilityChange = (event) => {
     setPostVisibility(event.target.value);
   };
 
+  // Funzione per salvare le impostazioni dei post
   const handleSaveSettings = () => {
-    // Logic to save settings goes here
+    // Logica per salvare le impostazioni
     console.log('Saved post settings:', {
       allowComments,
       postVisibility,
@@ -26,6 +30,7 @@ const PostSettings = () => {
     <div className="post-settings-container">
       <h2>Post Settings</h2>
 
+      {/* Switch per consentire i commenti */}
       <FormControlLabel
         control={
           <Switch
@@ -38,6 +43,7 @@ const PostSettings = () => {
         label={allowComments ? "Comments are allowed" : "Comments are not allowed"}
       />
 
+      {/* Selezione della visibilità del post */}
       <FormControl fullWidth margin="normal">
         <InputLabel id="post-visibility-select-label">Post Visibility</InputLabel>
         <Select
@@ -52,6 +58,7 @@ const PostSettings = () => {
         </Select>
       </FormControl>
 
+      {/* Pulsante per salvare le impostazioni */}
       <Button variant="contained" color="primary" fullWidth onClick={handleSaveSettings}>
         Save Settings
       </Button>

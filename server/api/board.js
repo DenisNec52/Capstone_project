@@ -2,12 +2,12 @@ const router = require('express').Router();
 const Pin = require('../models/pin');
 const User = require('../models/user');
 
-// Test route
+// Route di test
 router.get('/', (req, res, next) => {
   res.send('test board route');
 });
 
-// Create a new board for the user
+// Crea una nuova bacheca per l'utente
 router.post('/', (req, res, next) => {
   User.findOneAndUpdate(
     { _id: req.user._id },
@@ -25,7 +25,7 @@ router.post('/', (req, res, next) => {
     .catch(next);
 });
 
-// Get a specific board by its ID and populate its pins
+// Ottiene una bacheca specifica per ID e popola i suoi pin
 router.get('/pin/:boardId', (req, res, next) => {
   const { boardId } = req.params;
   
@@ -41,7 +41,7 @@ router.get('/pin/:boardId', (req, res, next) => {
     });
 });
 
-// Get all boards for a specific user
+// Ottiene tutte le bacheche di un utente specifico
 router.get('/:user', (req, res, next) => {
   const { user } = req.params;
   

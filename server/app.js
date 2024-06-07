@@ -11,20 +11,18 @@ import configurePassport from './utils/passport.js';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 
-dotenv.config();  // Load environment variables from .env file
+dotenv.config();  // Carica le variabili d'ambiente dal file .env
 
 const app = express();
 
+// Connessione al database MongoDB
 info("connecting to", process.env.MONGODB_URI);
-
-// Set strictQuery to true to suppress the warning
 mongoose.set('strictQuery', true);
 
-mongoose
-  .connect(process.env.MONGODB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
+mongoose.connect(process.env.MONGODB_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
   .then(() => {
     info("connected to MongoDB");
   })
@@ -32,26 +30,28 @@ mongoose
     logError("error connecting to MongoDB:", err.message);
   });
 
-app.use(cors());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Middleware
+app.use(cors());  // Abilita il CORS per le richieste cross-origin
+app.use(express.json());  // Parser per le richieste JSON
+app.use(express.urlencoded({ extended: true }));  // Parser per le richieste URL-encoded
 
+// Configurazione della sessione
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'your-secret-key',  // Replace with your actual secret key
+  secret: process.env.SESSION_SECRET || 'your-secret-key',  // Chiave segreta per le sessioni
   resave: false,
   saveUninitialized: true,
 }));
 
-app.use(passport.initialize());
-app.use(passport.session());
-configurePassport(passport);
+app.use(passport.initialize());  // Inizializza Passport.js
+app.use(passport.session());  // Permette a Passport.js di gestire le sessioni
+configurePassport(passport);  // Configura le strategie di Passport.js
 
-app.use(requestLogger);
+app.use(requestLogger);  // Middleware per il logging delle richieste
 
-app.use("/api/users", usersRouter);
+app.use("/api/users", usersRouter);  // Router per le API degli utenti
 
-// Google OAuth routes
-app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+// Rotte per l'autenticazione con Google OAuth
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'], response_type: 'code' }));
 
 app.get('/auth/google/callback', passport.authenticate('google', {
   failureRedirect: '/login',
@@ -61,6 +61,7 @@ app.get('/auth/google/callback', passport.authenticate('google', {
   res.redirect(`/?token=${token}`);
 });
 
+// Serve i file statici in produzione
 if (process.env.NODE_ENV === "production") {
   const buildPath = path.resolve('client', 'build');
   app.use(express.static(buildPath));
@@ -69,6 +70,7 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
+// Gestione degli endpoint sconosciuti e degli errori
 app.use(unknownEndpoint);
 app.use(errorHandler);
 

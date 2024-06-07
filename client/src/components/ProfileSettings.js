@@ -4,6 +4,7 @@ import "../components/ProfileSettings.css";
 import { createAvatar } from '@dicebear/core';
 import { avataaarsNeutral } from '@dicebear/collection';
 
+// Avatar predefiniti
 const avatars = [
   'https://example.com/avatar1.png',
   'https://example.com/avatar2.png',
@@ -12,26 +13,30 @@ const avatars = [
 ];
 
 const ProfileSettings = () => {
-  const [selectedAvatar, setSelectedAvatar] = useState(null);
-  const [isProfilePublic, setIsProfilePublic] = useState(true);
-  const [postOption, setPostOption] = useState('');
-  const [username, setUsername] = useState('');
-  const [avatarPreview, setAvatarPreview] = useState('');
-  const [initialsAvatar, setInitialsAvatar] = useState('');
+  const [selectedAvatar, setSelectedAvatar] = useState(null); // Avatar selezionato
+  const [isProfilePublic, setIsProfilePublic] = useState(true); // Visibilità del profilo
+  const [postOption, setPostOption] = useState(''); // Opzioni di post
+  const [username, setUsername] = useState(''); // Nome utente
+  const [avatarPreview, setAvatarPreview] = useState(''); // Anteprima dell'avatar
+  const [initialsAvatar, setInitialsAvatar] = useState(''); // Avatar iniziali
 
+  // Gestisce il cambiamento della visibilità del profilo
   const handleProfileVisibilityChange = (event) => {
     setIsProfilePublic(event.target.checked);
   };
 
+  // Gestisce il cambiamento delle opzioni di post
   const handlePostOptionChange = (event) => {
     setPostOption(event.target.value);
   };
 
+  // Gestisce il cambiamento del nome utente
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
     setInitialsAvatar(event.target.value.charAt(0).toUpperCase());
   };
 
+  // Gestisce il caricamento dell'avatar
   const handleAvatarUpload = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -44,13 +49,15 @@ const ProfileSettings = () => {
     }
   };
 
+  // Gestisce la selezione dell'avatar
   const handleAvatarSelect = (avatar) => {
     setAvatarPreview(avatar);
     setSelectedAvatar(avatar);
   };
 
+  // Gestisce il salvataggio delle impostazioni
   const handleSaveSettings = () => {
-    // Logic to save settings goes here
+    // Logica per salvare le impostazioni
     console.log('Saved settings:', {
       selectedAvatar,
       isProfilePublic,
@@ -63,6 +70,7 @@ const ProfileSettings = () => {
     <div className="profile-settings-container">
       <h2>Profile Settings</h2>
 
+      {/* Campo di input per il nome utente */}
       <FormControl fullWidth margin="normal">
         <TextField
           label="Username"
@@ -74,11 +82,14 @@ const ProfileSettings = () => {
         />
       </FormControl>
 
+      {/* Selezione dell'avatar */}
       <div className="avatar-selection">
+        {/* Avatar predefinito */}
         <div className="default-avatar">
           <Avatar sx={{ width: 56, height: 56 }}>{initialsAvatar}</Avatar>
           <p>Default Avatar</p>
         </div>
+        {/* Avatar caricato */}
         {avatarPreview && (
           <div className="uploaded-avatar">
             <Avatar src={avatarPreview} alt="Avatar Preview" sx={{ width: 56, height: 56 }} />
@@ -87,6 +98,7 @@ const ProfileSettings = () => {
         )}
       </div>
 
+      {/* Caricamento dell'avatar */}
       <div className="avatar-upload">
         <input
           accept="image/*"
@@ -102,6 +114,7 @@ const ProfileSettings = () => {
         </label>
       </div>
 
+      {/* Griglia per gli avatar predefiniti */}
       <Grid container spacing={2} className="avatar-grid">
         {avatars.map((avatar, index) => (
           <Grid item key={index}>
@@ -115,6 +128,7 @@ const ProfileSettings = () => {
         ))}
       </Grid>
 
+      {/* Selezione delle opzioni di post */}
       <FormControl fullWidth margin="normal">
         <InputLabel id="post-option-select-label">Post Options</InputLabel>
         <Select
@@ -129,6 +143,7 @@ const ProfileSettings = () => {
         </Select>
       </FormControl>
 
+      {/* Interruttore per la visibilità del profilo */}
       <FormControlLabel
         control={
           <Switch
@@ -141,6 +156,7 @@ const ProfileSettings = () => {
         label={isProfilePublic ? "Profile is Public" : "Profile is Private"}
       />
 
+      {/* Bottone per salvare le impostazioni */}
       <Button variant="contained" color="primary" fullWidth onClick={handleSaveSettings}>
         Save Settings
       </Button>

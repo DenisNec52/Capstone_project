@@ -1,14 +1,13 @@
 import React, { useEffect } from "react";
-
 import GitHubIcon from "@mui/icons-material/GitHub";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import PinterestIcon from "@mui/icons-material/Pinterest";
 import { Outlet, useLocation } from "react-router-dom";
 import { useDispatch } from "react-redux";
-
 import "./FormLayout.css";
 import { clearError } from "../actions/session";
 
+// Componente per visualizzare un'icona nel footer con un link esterno
 const FooterIcon = ({ icon, href }) => {
   return (
     <div>
@@ -20,7 +19,7 @@ const FooterIcon = ({ icon, href }) => {
 };
 
 const FormLayout = () => {
-  // Clear error messages when switch form
+  // Pulisce i messaggi di errore quando si cambia il form
   const location = useLocation();
   const dispatch = useDispatch();
   useEffect(() => dispatch(clearError()), [location, dispatch]);
@@ -38,10 +37,12 @@ const FormLayout = () => {
         <Outlet />
       </div>
       <div className="form__footer">
+        {/* Icona GitHub con link esterno */}
         <FooterIcon
           icon={<GitHubIcon />}
           href="https://www.github.com/kingyiusuen"
         />
+        {/* Icona LinkedIn con link esterno */}
         <FooterIcon
           icon={<LinkedInIcon />}
           href="https://www.linkedin.com/in/kingyiusuen"

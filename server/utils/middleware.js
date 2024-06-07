@@ -1,5 +1,6 @@
-import { info, error } from './logger.js';
+import { info, error as logError } from './logger.js';
 
+// Middleware per il logging delle richieste
 const requestLogger = (request, response, next) => {
   info("Date:  ", new Date().toLocaleString());
   info("Method:", request.method);
@@ -9,12 +10,14 @@ const requestLogger = (request, response, next) => {
   next();
 };
 
+// Middleware per gestire endpoint sconosciuti
 const unknownEndpoint = (request, response) => {
   response.status(404).send({ error: "unknown endpoint" });
 };
 
+// Middleware per gestire gli errori
 const errorHandler = (error, request, response, next) => {
-  error(error.message);
+  logError(error.message);
 
   if (error.name === "CastError") {
     return response.status(400).send({ error: "malformatted id" });

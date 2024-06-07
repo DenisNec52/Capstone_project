@@ -3,38 +3,44 @@ import {
   SET_FEED,
   SAVE_PIN,
   DELETE_SAVED_PIN,
-} from "../actions/pin";
+} from "../actions/pin"; // Importa le costanti delle azioni relative ai pin
 
+// Stato iniziale del riduttore per i pin
 const INITIAL_STATE = {
-  feed: [],
-  saved: [],
+  feed: [], // Elenco dei pin visualizzati nell'alimentazione (feed)
+  saved: [], // Elenco dei pin salvati dall'utente
 };
 
+// Riduttore per gestire lo stato dei pin
 const pinReducer = (state = INITIAL_STATE, action) => {
   switch (action.type) {
     case FETCH_SAVED_PINS:
+      // Azione per recuperare i pin salvati dall'utente
       return {
-        feed: state.feed,
-        saved: action.photoUrls,
+        ...state, // Mantieni lo stato attuale
+        saved: action.photoUrls, // Aggiorna l'elenco dei pin salvati con i nuovi pin recuperati
       };
     case SET_FEED:
+      // Azione per impostare i pin nell'alimentazione (feed)
       return {
-        feed: action.photoUrls,
-        saved: state.saved,
+        ...state, // Mantieni lo stato attuale
+        feed: action.photoUrls, // Aggiorna l'elenco dei pin nell'alimentazione con i nuovi pin
       };
     case SAVE_PIN:
+      // Azione per salvare un nuovo pin
       return {
-        feed: state.feed,
-        saved: [...state.saved, action.photoUrl],
+        ...state, // Mantieni lo stato attuale
+        saved: [...state.saved, action.photoUrl], // Aggiungi il nuovo pin all'elenco dei pin salvati
       };
     case DELETE_SAVED_PIN:
+      // Azione per eliminare un pin salvato
       return {
-        feed: state.feed,
-        saved: state.saved.filter((url) => url !== action.photoUrl),
+        ...state, // Mantieni lo stato attuale
+        saved: state.saved.filter((url) => url !== action.photoUrl), // Rimuovi il pin dall'elenco dei pin salvati
       };
     default:
-      return state;
+      return state; // Restituisci lo stato attuale per azioni non gestite
   }
 };
 
-export default pinReducer;
+export default pinReducer; // Esporta il riduttore dei pin

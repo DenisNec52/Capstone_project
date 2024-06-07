@@ -15,12 +15,15 @@ import Settings from './components/Settings';
 import NavBar from './components/NavBar';
 import DeleteAccount from './components/DeleteAccount';
 
+// Componente per gestire il token ottenuto dalla query string dell'URL
 const HandleToken = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
+    // Estrai il token dalla query string dell'URL
     const urlParams = new URLSearchParams(window.location.search);
     const token = urlParams.get('token');
+    // Se il token è presente, salvalo nello storage locale e reindirizza alla home
     if (token) {
       localStorage.setItem('token', token);
       navigate('/');
@@ -30,11 +33,15 @@ const HandleToken = () => {
   return null; // Non restituisce nulla visivamente
 };
 
+// Componente principale dell'applicazione
 const App = () => {
   return (
     <BrowserRouter>
+      {/* Componente per gestire il token */}
       <HandleToken />
+      {/* Definizione delle rotte dell'applicazione */}
       <Routes>
+        {/* Rotte per l'autenticazione */}
         <Route element={<FormLayout />}>
           <Route
             path="/login"
@@ -53,6 +60,7 @@ const App = () => {
             }
           />
         </Route>
+        {/* Rotte per le pagine protette */}
         <Route
           path="/profile"
           element={
@@ -86,6 +94,7 @@ const App = () => {
             </RequireAuth>
           }
         />
+        {/* Rotte per la gestione delle pagine */}
         <Route 
           path="/upload" 
           element={ 
