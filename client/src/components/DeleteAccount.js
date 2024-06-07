@@ -6,13 +6,15 @@ import "./DeleteAccount.css";
 const DeleteAccount = () => {
   const navigate = useNavigate();
 
+  // Funzione per gestire la conferma di eliminazione dell'account
   const handleConfirmDelete = () => {
-    // Logic to delete the account
+    // Logica per eliminare l'account
     console.log("Account deleted");
-    // Navigate to home page after deletion
+    // Naviga alla home page dopo l'eliminazione
     navigate('/');
   };
 
+  // Funzione per gestire l'annullamento della cancellazione dell'account
   const handleCancel = () => {
     navigate('/settings');
   };
@@ -26,9 +28,11 @@ const DeleteAccount = () => {
         Are you sure you want to delete your account? This action cannot be undone.
       </Typography>
       <Box className="delete-account-buttons">
+        {/* Pulsante per eliminare l'account */}
         <Button variant="contained" color="secondary" onClick={handleConfirmDelete}>
           Delete Account
         </Button>
+        {/* Pulsante per annullare l'eliminazione dell'account */}
         <Button variant="outlined" onClick={handleCancel}>
           Cancel
         </Button>

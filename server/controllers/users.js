@@ -1,128 +1,139 @@
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const usersRouter = require("express").Router();
-const passport = require("passport");
-const User = require("../models/user");
+import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
+import { Router } from 'express';
+import passport from 'passport';
+import User from '../models/user.js';
 
+const usersRouter = Router();
+
+// Endpoint per la registrazione di un nuovo utente
 usersRouter.post("/signup", async (request, response) => {
-  const body = request.body;
-
-  let user;
-  try {
-    user = await User.findOne({ username: body.username });
-  } catch (exception) {
-    return response
-      .status(500)
-      .json({ error: "A database error has occurred" });
-  }
-  if (user) {
-    return response
-      .status(400)
-      .json({ error: "The username has already been taken" });
-  }
-
-  const saltRounds = 10;
-  const passwordHash = await bcrypt.hash(body.password, saltRounds);
-
-  const newUser = new User({
-    username: body.username,
-    name: body.name,
-    passwordHash: passwordHash,
-  });
+  const { username, name, email, password } = request.body;
 
   try {
+    // Verifica se il nome utente esiste già
+    const existingUser = await User.findOne({ username });
+    if (existingUser) {
+      return response.status(400).json({ error: "The username has already been taken" });
+    }
+
+    // Verifica se l'email esiste già
+    const existingEmail = await User.findOne({ email });
+    if (existingEmail) {
+      return response.status(400).json({ error: "The email has already been taken" });
+    }
+
+    // Hash della password
+    const saltRounds = 10;
+    const passwordHash = await bcrypt.hash(password, saltRounds);
+
+    // Creazione del nuovo utente
+    const newUser = new User({
+      username,
+      name,
+      email,
+      passwordHash,
+    });
+
     const savedUser = await newUser.save();
-    return response.json(savedUser);
+
+    // Creazione del token JWT
+    const payload = {
+      id: savedUser._id,
+      username: savedUser.username,
+      name: savedUser.name,
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    return response.status(200).json({ token: `Bearer ${token}` });
   } catch (exception) {
-    return response
-      .status(500)
-      .json({ error: "A database error has occurred" });
+    console.error("Error during signup:", exception);
+    return response.status(500).json({ error: "A database error has occurred" });
   }
 });
 
+// Endpoint per il login dell'utente
 usersRouter.post("/login", async (request, response) => {
-  const body = request.body;
+  const { usernameOrEmail, password } = request.body;
 
-  let user;
   try {
-    user = await User.findOne({ username: body.username });
+    // Verifica se l'utente esiste
+    const user = await User.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] });
+    if (!user) {
+      return response.status(401).json({ error: "Invalid username or password" });
+    }
+
+    // Verifica della password
+    const isPasswordCorrect = await bcrypt.compare(password, user.passwordHash);
+    if (!isPasswordCorrect) {
+      return response.status(401).json({ error: "Invalid username or password" });
+    }
+
+    // Creazione del token JWT
+    const payload = {
+      id: user._id,
+      username: user.username,
+      name: user.name,
+    };
+
+    const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' });
+
+    return response.status(200).json({ token: `Bearer ${token}` });
   } catch (exception) {
-    return response
-      .status(500)
-      .json({ error: "A database error has occurred" });
+    console.error("Error during login:", exception);
+    return response.status(500).json({ error: "A database error has occurred" });
   }
-
-  const isPasswordCorrect =
-    user === null
-      ? false
-      : await bcrypt.compare(body.password, user.passwordHash);
-
-  if (!user || !isPasswordCorrect) {
-    return response.status(401).json({ error: "Invalid username or password" });
-  }
-
-  const payload = {
-    id: user._id,
-    username: user.username,
-    name: user.name,
-  };
-
-  const token = jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: 3600 });
-
-  return response.status(200).send({ token: `Bearer ${token}` });
 });
 
-usersRouter.get(
-  "/:id",
-  passport.authenticate("jwt", { session: false }),
-  async (request, response) => {
-    try {
-      const user = await User.findById(request.params.id);
-      return response.json(user);
-    } catch (exception) {
-      return response
-        .status(500)
-        .json({ error: "A database error has occurred" });
+// Endpoint per ottenere le informazioni di un utente
+usersRouter.get("/:id", passport.authenticate("jwt", { session: false }), async (request, response) => {
+  try {
+    const user = await User.findById(request.params.id);
+    if (!user) {
+      return response.status(404).json({ error: "User not found" });
     }
+    return response.json(user);
+  } catch (exception) {
+    console.error("Error fetching user:", exception);
+    return response.status(500).json({ error: "A database error has occurred" });
   }
-);
+});
 
-usersRouter.put(
-  "/:id/save-pin",
-  passport.authenticate("jwt", { session: false }),
-  async (request, response) => {
-    try {
-      const user = await User.findByIdAndUpdate(
-        request.params.id,
-        { $addToSet: { savedPins: request.body.photoUrl } },
-        { new: true }
-      );
-      return response.json(user);
-    } catch (exception) {
-      return response
-        .status(500)
-        .json({ error: "A database error has occurred" });
+// Endpoint per salvare un pin
+usersRouter.put("/:id/save-pin", passport.authenticate("jwt", { session: false }), async (request, response) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      request.params.id,
+      { $addToSet: { savedPins: request.body.photoUrl } },
+      { new: true }
+    );
+    if (!user) {
+      return response.status(404).json({ error: "User not found" });
     }
+    return response.json(user);
+  } catch (exception) {
+    console.error("Error saving pin:", exception);
+    return response.status(500).json({ error: "A database error has occurred" });
   }
-);
+});
 
-usersRouter.put(
-  "/:id/delete-pin",
-  passport.authenticate("jwt", { session: false }),
-  async (request, response) => {
-    try {
-      const user = await User.findByIdAndUpdate(
-        request.params.id,
-        { $pull: { savedPins: request.body.photoUrl } },
-        { new: true }
-      );
-      return response.json(user);
-    } catch (exception) {
-      return response
-        .status(500)
-        .json({ error: "A database error has occurred" });
+// Endpoint per eliminare un pin
+usersRouter.put("/:id/delete-pin", passport.authenticate("jwt", { session: false }), async (request, response) => {
+  try {
+    const user = await User.findByIdAndUpdate(
+      request.params.id,
+      { $pull: { savedPins: request.body.photoUrl } },
+      { new: true }
+    );
+    if (!user) {
+      return response.status(404).json({ error: "User not found" });
     }
+    return response.json(user);
+  } catch (exception) {
+    console.error("Error deleting pin:", exception);
+    return response.status(500).json({ error: "A database error has occurred" });
   }
-);
+});
 
-module.exports = usersRouter;
+export default usersRouter;
