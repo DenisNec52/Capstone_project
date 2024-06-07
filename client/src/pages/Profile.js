@@ -3,7 +3,6 @@ import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import { getSavedPins } from "../actions/pin";
-import NavBar from "../components/NavBar";
 import PinGrid from "../components/PinGrid";
 import ProfileHeader from "../components/ProfileHeader";
 

@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { signup } from "../actions/session";
+import { FaGoogle } from "react-icons/fa";
 import "../components/FormLayout.css";
 
 const SignupFormLayout = () => {
@@ -23,15 +24,17 @@ const SignupFormLayout = () => {
     }
   };
 
+  const handleGoogleSignUp = () => {
+    window.location.href = 'http://localhost:3001/auth/google';
+  };
+
   return (
     <>
       <form onSubmit={handleSubmit(handleSignup)}>
         <input
           type="text"
           placeholder="Username"
-          className={`form__input ${
-            errors.username ? "form__input--error" : ""
-          }`}
+          className={`form__input ${errors.username ? "form__input--error" : ""}`}
           {...register("username", { required: true })}
         />
         {errors.username && <p className="form__error">Username is required</p>}
@@ -39,9 +42,7 @@ const SignupFormLayout = () => {
         <input
           type="email"
           placeholder="Email"
-          className={`form__input ${
-            errors.email ? "form__input--error" : ""
-          }`}
+          className={`form__input ${errors.email ? "form__input--error" : ""}`}
           {...register("email", { required: true, pattern: /^[^@ ]+@[^@ ]+\.[^@ .]{2,}$/ })}
         />
         {errors.email && <p className="form__error">Valid email is required</p>}
@@ -57,9 +58,7 @@ const SignupFormLayout = () => {
         <input
           type="password"
           placeholder="Password"
-          className={`form__input ${
-            errors.password ? "form__input--error" : ""
-          }`}
+          className={`form__input ${errors.password ? "form__input--error" : ""}`}
           {...register("password", { required: true })}
         />
         {errors.password && <p className="form__error">Password is required</p>}
@@ -70,6 +69,9 @@ const SignupFormLayout = () => {
           Sign Up
         </button>
       </form>
+      <button onClick={handleGoogleSignUp} className="form__btn form__btn--google">
+        <FaGoogle style={{ marginRight: '8px' }} /> Sign Up with Google
+      </button>
       <Link to="/login">Already a member? Log in</Link>
     </>
   );

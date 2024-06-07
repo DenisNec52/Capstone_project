@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 import uniqueValidator from 'mongoose-unique-validator';
-import bcrypt, { hash } from 'bcrypt';
+import bcrypt from 'bcrypt';
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -19,8 +19,12 @@ const userSchema = new mongoose.Schema({
   },
   passwordHash: {
     type: String,
-    required: true,
-    hash: true,
+    required: false,
+  },
+  googleId: {
+    type: String,
+    unique: true,
+    sparse: true,
   },
   savedPins: {
     type: [String],

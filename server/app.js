@@ -9,6 +9,7 @@ import { info, error as logError } from './utils/logger.js';
 import mongoose from 'mongoose';
 import configurePassport from './utils/passport.js';
 import dotenv from 'dotenv';
+import jwt from 'jsonwebtoken';
 
 dotenv.config();  // Load environment variables from .env file
 
@@ -36,7 +37,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use(session({
-  secret: 'your-secret-key',  // Replace with your actual secret key
+  secret: process.env.SESSION_SECRET || 'your-secret-key',  // Replace with your actual secret key
   resave: false,
   saveUninitialized: true,
 }));
@@ -48,6 +49,17 @@ configurePassport(passport);
 app.use(requestLogger);
 
 app.use("/api/users", usersRouter);
+
+// Google OAuth routes
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+app.get('/auth/google/callback', passport.authenticate('google', {
+  failureRedirect: '/login',
+  session: false,
+}), (req, res) => {
+  const token = jwt.sign({ id: req.user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+  res.redirect(`/?token=${token}`);
+});
 
 if (process.env.NODE_ENV === "production") {
   const buildPath = path.resolve('client', 'build');

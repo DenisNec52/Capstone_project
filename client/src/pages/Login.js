@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { login } from "../actions/session";
+import { FaGoogle } from "react-icons/fa";
 import "../components/FormLayout.css";
 
 const LoginFormLayout = () => {
@@ -23,6 +24,10 @@ const LoginFormLayout = () => {
     }
   };
 
+  const handleGoogleLogin = () => {
+    window.location.href = 'http://localhost:3001/auth/google';
+  };
+
   const handleDemoLogin = () => {
     const userData = {
       usernameOrEmail: "john.doe",
@@ -37,9 +42,7 @@ const LoginFormLayout = () => {
         <input
           type="text"
           placeholder="Username or Email"
-          className={`form__input ${
-            errors.usernameOrEmail ? "form__input--error" : ""
-          }`}
+          className={`form__input ${errors.usernameOrEmail ? "form__input--error" : ""}`}
           {...register("usernameOrEmail", { required: true })}
         />
         {errors.usernameOrEmail && <p className="form__error">Username or Email is required</p>}
@@ -47,9 +50,7 @@ const LoginFormLayout = () => {
         <input
           type="password"
           placeholder="Password"
-          className={`form__input ${
-            errors.password ? "form__input--error" : ""
-          }`}
+          className={`form__input ${errors.password ? "form__input--error" : ""}`}
           {...register("password", { required: true })}
         />
         {errors.password && <p className="form__error">Password is required</p>}
@@ -62,6 +63,9 @@ const LoginFormLayout = () => {
       </form>
       <button onClick={handleDemoLogin} className="form__btn form__btn--demo">
         Demo
+      </button>
+      <button onClick={handleGoogleLogin} className="form__btn form__btn--google">
+        <FaGoogle style={{ marginRight: '8px' }} /> Login with Google
       </button>
       <Link to="/signup">Not on Pinterest yet? Sign up</Link>
     </>

@@ -3,7 +3,6 @@ import { useForm } from 'react-hook-form';
 import { TextField, Button, CircularProgress } from '@mui/material';
 import axios from 'axios';
 import "../components/UploadPostForm.css";
-import NavBar from "../components/NavBar";
 
 const UploadPostForm = () => {
   const { register, handleSubmit, reset } = useForm();
