@@ -40,12 +40,12 @@ const FormLayout = () => {
         {/* Icona GitHub con link esterno */}
         <FooterIcon
           icon={<GitHubIcon />}
-          href="https://www.github.com/kingyiusuen"
+          href="https://github.com/DenisNec52"
         />
         {/* Icona LinkedIn con link esterno */}
         <FooterIcon
           icon={<LinkedInIcon />}
-          href="https://www.linkedin.com/in/kingyiusuen"
+          href="https://www.linkedin.com/feed/?trk=guest_homepage-basic_google-one-tap-submit"
         />
       </div>
     </div>
