@@ -12,7 +12,6 @@ const NavBar = ({ query }) => {
   const navigate = useNavigate();
   const user = useSelector((state) => state.session.user);
 
-  // Funzione per gestire la ricerca
   const handleSearch = (event) => {
     event.preventDefault();
     navigate(`/search/${event.target.query.value}`);
@@ -20,13 +19,11 @@ const NavBar = ({ query }) => {
 
   return (
     <div className="nav-bar">
-      {/* Icona del logo Pinterest */}
       <div className="nav-bar__icon nav-bar__icon--red">
         <Link to="/">
           <PinterestIcon />
         </Link>
       </div>
-      {/* Link per la homepage */}
       <div className="nav-bar__link">
         <NavLink
           to="/"
@@ -37,7 +34,6 @@ const NavBar = ({ query }) => {
           Home
         </NavLink>
       </div>
-      {/* Box di ricerca */}
       <div className="nav-bar__search-box">
         <SearchIcon />
         <form onSubmit={handleSearch}>
@@ -50,10 +46,8 @@ const NavBar = ({ query }) => {
           <button type="submit"></button>
         </form>
       </div>
-      {/* Gruppo di icone del profilo utente */}
       <div className="nav-bar__icon-group">
         <div className="nav-bar__profile">
-          {/* Dropdown del profilo utente */}
           <ProfileDropdown user={user} />
         </div>
       </div>

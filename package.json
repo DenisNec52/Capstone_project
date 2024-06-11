@@ -18,6 +18,7 @@
   "dependencies": {
     "@dicebear/collection": "^8.0.1",
     "@dicebear/core": "^8.0.1",
+    "base64url": "^3.0.1",
     "bcrypt": "^5.0.1",
     "cloudinary": "^2.2.0",
     "concurrently": "^6.3.0",
@@ -29,6 +30,7 @@
     "mongoose": "^6.12.9",
     "mongoose-unique-validator": "^3.0.0",
     "multer": "^1.4.5-lts.1",
+    "multer-storage-cloudinary": "^4.0.0",
     "passport": "^0.5.3",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",

@@ -136,4 +136,25 @@ usersRouter.put("/:id/delete-pin", passport.authenticate("jwt", { session: false
   }
 });
 
+router.put('/update-avatar', passport.authenticate('jwt', { session: false }), async (req, res) => {
+  console.log("Request body:", req.body);
+  if (!req.body.avatar) {
+    return res.status(400).json({ error: 'Avatar URL is required' });
+  }
+
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { avatar: req.body.avatar },
+      { new: true }
+    );
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+    return res.json({ avatar: user.avatar });
+  } catch (exception) {
+    console.error('Error updating avatar:', exception);
+    return res.status(500).json({ error: 'A database error has occurred' });
+  }
+});
 export default usersRouter;

@@ -11,6 +11,10 @@ import configurePassport from './utils/passport.js';
 import dotenv from 'dotenv';
 import jwt from 'jsonwebtoken';
 
+import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import multer from 'multer';
+
 dotenv.config();  // Carica le variabili d'ambiente dal file .env
 
 const app = express();
@@ -70,6 +74,32 @@ if (process.env.NODE_ENV === "production") {
   });
 }
 
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+
+// Configurazione dello storage per Multer con Cloudinary
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: 'uploads',
+    allowedFormats: ['jpg', 'png'],
+  },
+});
+
+const upload = multer({ storage });
+
+// Route per l'upload dell'immagine del profilo
+app.post('/api/upload', upload.single('photo'), (req, res) => {
+  if (req.file && req.file.path) {
+    return res.status(200).json({ url: req.file.path });
+  }
+  return res.status(400).json({ error: 'Image upload failed' });
+});
+
+app.use('/api/users', usersRouter);
 // Gestione degli endpoint sconosciuti e degli errori
 app.use(unknownEndpoint);
 app.use(errorHandler);

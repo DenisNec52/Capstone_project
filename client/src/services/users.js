@@ -34,3 +34,4 @@ export const deleteSavedPin = async ({ userId, photoUrl }) => {
   // Effettua una richiesta PUT per eliminare un pin salvato dall'utente con l'ID specificato e l'URL dell'immagine
   return await instance.put(`/${userId}/delete-pin`, { photoUrl });
 };
+export const updateAvatar = (avatarData) => instance.put('/update-avatar', avatarData);

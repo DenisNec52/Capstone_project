@@ -29,6 +29,9 @@ const userSchema = new mongoose.Schema({
   savedPins: {
     type: [String],
   },
+  avatar: {
+    type: String,
+  },
 });
 
 userSchema.plugin(uniqueValidator);

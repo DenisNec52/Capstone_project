@@ -1,95 +1,63 @@
 import React, { useState } from 'react';
-import { TextField, Button, FormControlLabel, Switch, Avatar, MenuItem, Select, InputLabel, FormControl, Grid } from '@mui/material';
+import { TextField, Button, Avatar, Grid } from '@mui/material';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { updateUserAvatar } from '../actions/session';
 import "../components/ProfileSettings.css";
-import { createAvatar } from '@dicebear/core';
-import { avataaarsNeutral } from '@dicebear/collection';
-
-// Avatar predefiniti
-const avatars = [
-  'https://example.com/avatar1.png',
-  'https://example.com/avatar2.png',
-  'https://example.com/avatar3.png',
-  // Aggiungi altri avatar predefiniti qui
-];
 
 const ProfileSettings = () => {
-  const [selectedAvatar, setSelectedAvatar] = useState(null); // Avatar selezionato
-  const [isProfilePublic, setIsProfilePublic] = useState(true); // Visibilità del profilo
-  const [postOption, setPostOption] = useState(''); // Opzioni di post
-  const [username, setUsername] = useState(''); // Nome utente
-  const [avatarPreview, setAvatarPreview] = useState(''); // Anteprima dell'avatar
-  const [initialsAvatar, setInitialsAvatar] = useState(''); // Avatar iniziali
+  const [avatarPreview, setAvatarPreview] = useState('');
+  const [initialsAvatar, setInitialsAvatar] = useState('');
+  const [username, setUsername] = useState('');
+  const dispatch = useDispatch();
 
-  // Gestisce il cambiamento della visibilità del profilo
-  const handleProfileVisibilityChange = (event) => {
-    setIsProfilePublic(event.target.checked);
-  };
-
-  // Gestisce il cambiamento delle opzioni di post
-  const handlePostOptionChange = (event) => {
-    setPostOption(event.target.value);
-  };
-
-  // Gestisce il cambiamento del nome utente
   const handleUsernameChange = (event) => {
     setUsername(event.target.value);
     setInitialsAvatar(event.target.value.charAt(0).toUpperCase());
   };
 
-  // Gestisce il caricamento dell'avatar
-  const handleAvatarUpload = (event) => {
+  const handleAvatarUpload = async (event) => {
     const file = event.target.files[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setAvatarPreview(reader.result);
-        setSelectedAvatar(reader.result);
-      };
-      reader.readAsDataURL(file);
+      const formData = new FormData();
+      formData.append('photo', file);
+
+      try {
+        const response = await axios.post('/api/upload', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        console.log("Avatar URL from server:", response.data.url);
+        setAvatarPreview(response.data.url);
+        dispatch(updateUserAvatar(response.data.url));  // Dispatch action to update avatar
+      } catch (error) {
+        console.error('Error uploading avatar:', error);
+      }
     }
   };
 
-  // Gestisce la selezione dell'avatar
-  const handleAvatarSelect = (avatar) => {
-    setAvatarPreview(avatar);
-    setSelectedAvatar(avatar);
-  };
-
-  // Gestisce il salvataggio delle impostazioni
   const handleSaveSettings = () => {
-    // Logica per salvare le impostazioni
-    console.log('Saved settings:', {
-      selectedAvatar,
-      isProfilePublic,
-      postOption,
-      username,
-    });
+    // Additional settings save logic
+    alert('Settings saved successfully');
   };
 
   return (
     <div className="profile-settings-container">
       <h2>Profile Settings</h2>
-
-      {/* Campo di input per il nome utente */}
-      <FormControl fullWidth margin="normal">
-        <TextField
-          label="Username"
-          value={username}
-          onChange={handleUsernameChange}
-          variant="outlined"
-          fullWidth
-          margin="normal"
-        />
-      </FormControl>
-
-      {/* Selezione dell'avatar */}
+      <TextField
+        label="Username"
+        value={username}
+        onChange={handleUsernameChange}
+        variant="outlined"
+        fullWidth
+        margin="normal"
+      />
       <div className="avatar-selection">
-        {/* Avatar predefinito */}
         <div className="default-avatar">
           <Avatar sx={{ width: 56, height: 56 }}>{initialsAvatar}</Avatar>
           <p>Default Avatar</p>
         </div>
-        {/* Avatar caricato */}
         {avatarPreview && (
           <div className="uploaded-avatar">
             <Avatar src={avatarPreview} alt="Avatar Preview" sx={{ width: 56, height: 56 }} />
@@ -97,8 +65,6 @@ const ProfileSettings = () => {
           </div>
         )}
       </div>
-
-      {/* Caricamento dell'avatar */}
       <div className="avatar-upload">
         <input
           accept="image/*"
@@ -113,50 +79,6 @@ const ProfileSettings = () => {
           </Button>
         </label>
       </div>
-
-      {/* Griglia per gli avatar predefiniti */}
-      <Grid container spacing={2} className="avatar-grid">
-        {avatars.map((avatar, index) => (
-          <Grid item key={index}>
-            <Avatar
-              src={avatar}
-              alt={`Avatar ${index + 1}`}
-              sx={{ width: 56, height: 56, cursor: 'pointer', border: avatar === avatarPreview ? '2px solid blue' : 'none' }}
-              onClick={() => handleAvatarSelect(avatar)}
-            />
-          </Grid>
-        ))}
-      </Grid>
-
-      {/* Selezione delle opzioni di post */}
-      <FormControl fullWidth margin="normal">
-        <InputLabel id="post-option-select-label">Post Options</InputLabel>
-        <Select
-          labelId="post-option-select-label"
-          value={postOption}
-          onChange={handlePostOptionChange}
-          fullWidth
-        >
-          <MenuItem value="everyone">Everyone can comment</MenuItem>
-          <MenuItem value="friends">Only friends can comment</MenuItem>
-          <MenuItem value="none">No one can comment</MenuItem>
-        </Select>
-      </FormControl>
-
-      {/* Interruttore per la visibilità del profilo */}
-      <FormControlLabel
-        control={
-          <Switch
-            checked={isProfilePublic}
-            onChange={handleProfileVisibilityChange}
-            name="profileVisibility"
-            color="primary"
-          />
-        }
-        label={isProfilePublic ? "Profile is Public" : "Profile is Private"}
-      />
-
-      {/* Bottone per salvare le impostazioni */}
       <Button variant="contained" color="primary" fullWidth onClick={handleSaveSettings}>
         Save Settings
       </Button>

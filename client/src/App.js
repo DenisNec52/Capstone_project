@@ -77,7 +77,7 @@ const App = () => {
           element={
             <RequireAuth>
               <>
-                <NavBar />
+
                 <Search />
               </>
             </RequireAuth>

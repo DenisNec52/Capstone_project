@@ -73,3 +73,15 @@ export default function (state = defaultUser, action) {
       return state;
   }
 }
+
+export const updateUserAvatar = (avatarUrl) => async (dispatch) => {
+  try {
+    const response = await axios.put('/api/users/update-avatar', { avatar: avatarUrl });
+    dispatch({
+      type: 'UPDATE_USER_AVATAR',
+      payload: response.data.avatar,
+    });
+  } catch (error) {
+    console.error('Error updating avatar:', error);
+  }
+};
